@@ -1,5 +1,6 @@
 {
 	"name": "ycms/wp-page-numbers",
+	"type": "wordpress-plugin",
 	"description": "The component of FastEcho Framework",
 	"authors": [
 	]
