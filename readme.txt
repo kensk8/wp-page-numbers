@@ -2,7 +2,7 @@
 Tags: navigation, paging, page, numbers, archive, categories, plugin, seo
 Requires at least: 2.3
 Tested up to: 2.8
-Stable tag: 0.5
+Stable tag: 0.6
 
 A simple paging navigation plugin for users and search engines. Instead of next and previous page it shows numbers and arrows. Settings available.
 
@@ -10,6 +10,9 @@ A simple paging navigation plugin for users and search engines. Instead of next 
 
 = User friendly navigation =
 With page numbers instead of next and previous links users can easily navigate much quicker to the page they want. It is good for SEO (Search Engine Optimization) as well, because it creates a tighter inner link structure. Works with all well known browsers (Internet Explorer, Firefox, Opera and Safari).
+
+= Updates 0.6 =
+* Added the possibility to pass WP_Query object as parameter to the function wp_page_numbers
 
 = Updates 0.5 =
 * Fixed bug with page numbers disappearing
