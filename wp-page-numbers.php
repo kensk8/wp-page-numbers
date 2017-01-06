@@ -3,7 +3,7 @@
 Plugin Name: WP Page Numbers
 Plugin URI: http://www.jenst.se/2008/03/29/wp-page-numbers
 Description: Show pages numbers instead of "Next page" and "Previous Page".
-Version: 0.5
+Version: 0.6
 Author: Jens T&ouml;rnell
 Author URI: http://www.jenst.se
 */
@@ -156,13 +156,24 @@ function wp_page_numbers_nextpage($paged, $max_page, $nextpage)
 	return $pagingString;
 }
 
-function wp_page_numbers($start = "", $end = "")
+function wp_page_numbers($wp_query_global = NULL,$start = "", $end = "")
 {
 	global $wp_query;
 	global $max_page;
 	global $paged;
-	if ( !$max_page ) { $max_page = $wp_query->max_num_pages; }
-	if ( !$paged ) { $paged = 1; }
+	
+	if($wp_query_global !== NULL){
+		$wp_query_local = $wp_query_global;
+		$max_page_local = $wp_query_local->max_num_pages;
+		$paged_local = $wp_query_local->query_vars['query_vars'];
+	}else{
+		$wp_query_local = $wp_query;
+		$max_page_local = $max_page;
+		$paged_local = $paged;
+	}
+	
+	if ( !$max_page_local ) { $max_page_local = $wp_query_local->max_num_pages; }
+	if ( !$paged_local ) { $paged_local = 1; }
 	
 	$settings = get_option('wp_page_numbers_array');
 	$page_of_page = $settings["page_of_page"];
@@ -198,31 +209,31 @@ function wp_page_numbers($start = "", $end = "")
 		$limit_pages_right = ($limit_pages/2)-1;
 	}
 	
-	if( $max_page <= $limit_pages ) { $limit_pages = $max_page; }
+	if( $max_page_local <= $limit_pages ) { $limit_pages = $max_page_local; }
 	
 	$pagingString = "<div id='wp_page_numbers'>\n";
 	$pagingString .= '<ul>';
 	
 	if($page_of_page != "no")
-		$pagingString .= wp_page_numbers_page_of_page($max_page, $paged, $page_of_page_text, $page_of_of);
+		$pagingString .= wp_page_numbers_page_of_page($max_page_local, $paged_local, $page_of_page_text, $page_of_of);
 	
 	if( ($paged) <= $limit_pages_left )
 	{
-		list ($value1, $value2, $page_check_min) = wp_page_numbers_left_side($max_page, $limit_pages, $paged, $pagingString);
+		list ($value1, $value2, $page_check_min) = wp_page_numbers_left_side($max_page_local, $limit_pages, $paged_local, $pagingString);
 		$pagingMiddleString .= $value1;
 	}
 	elseif( ($max_page+1 - $paged) <= $limit_pages_right )
 	{
-		list ($value1, $value2, $page_check_min) = wp_page_numbers_right_side($max_page, $limit_pages, $paged, $pagingString);
+		list ($value1, $value2, $page_check_min) = wp_page_numbers_right_side($max_page_local, $limit_pages, $paged_local, $pagingString);
 		$pagingMiddleString .= $value1;
 	}
 	else
 	{
-		list ($value1, $value2, $page_check_min) = wp_page_numbers_middle_side($max_page, $paged, $limit_pages_left, $limit_pages_right);
+		list ($value1, $value2, $page_check_min) = wp_page_numbers_middle_side($max_page_local, $paged_local, $limit_pages_left, $limit_pages_right);
 		$pagingMiddleString .= $value1;
 	}
 	if($next_prev_text != "no")
-		$pagingString .= wp_page_numbers_prevpage($paged, $max_page, $prevpage);
+		$pagingString .= wp_page_numbers_prevpage($paged_local, $max_page_local, $prevpage);
 
 		if ($page_check_min == false && $show_start_end_numbers != "no")
 		{
@@ -238,12 +249,12 @@ function wp_page_numbers($start = "", $end = "")
 		{
 			$pagingString .= "<li class=\"space\">".$endspace."</li>\n";
 			$pagingString .= "<li class=\"first_last_page\">";
-			$pagingString .= "<a href=\"" . get_pagenum_link($max_page) . "\">" . $max_page . "</a>";
+			$pagingString .= "<a href=\"" . get_pagenum_link($max_page_local) . "\">" . $max_page_local . "</a>";
 			$pagingString .= "</li>\n";
 		}
 	
 	if($next_prev_text != "no")
-		$pagingString .= wp_page_numbers_nextpage($paged, $max_page, $nextpage);
+		$pagingString .= wp_page_numbers_nextpage($paged_local, $max_page_local, $nextpage);
 	
 	$pagingString .= "</ul>\n";
 	
