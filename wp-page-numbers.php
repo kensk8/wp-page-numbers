@@ -3,7 +3,7 @@
 Plugin Name: WP Page Numbers
 Plugin URI: http://www.jenst.se/2008/03/29/wp-page-numbers
 Description: Show pages numbers instead of "Next page" and "Previous Page".
-Version: 0.5
+Version: 0.6
 Author: Jens T&ouml;rnell
 Author URI: http://www.jenst.se
 */
